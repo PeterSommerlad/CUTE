@@ -63,9 +63,9 @@ namespace cute {
 			if(!args.size() || !info.size())
 				return true;
 			if(args.end() != find_if(args.begin(), args.end(), prefixMatcher(info))){
-			   std::transform(args.begin(), args.end(), std::inserter(match,match.begin()),prefixCutter(info));
-			   match.erase(std::string()); // get rid of empty string
-			   return true;
+				std::transform(args.begin(), args.end(), std::inserter(match,match.begin()),prefixCutter(info));
+				match.erase(std::string()); // get rid of empty string
+				return true;
 			}
 			return false;
 		}
