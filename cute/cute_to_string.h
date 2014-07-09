@@ -196,7 +196,7 @@ namespace cute_to_string {
 			return os<<s;
 		} // needed to compensate for following overload, hope nothing else matches
 		template <template<typename,typename,typename> class S,
-		          typename K, typename CMP, typename ALLOC>
+				  typename K, typename CMP, typename ALLOC>
 		std::ostream &to_stream(std::ostream &os,S<K,CMP,ALLOC> const &t){
 			printItWithDelimiter<typename S<K,CMP,ALLOC>::value_type> printer(os);
 			os << cute::demangle(typeid(S<K,CMP,ALLOC>).name()) << '{';

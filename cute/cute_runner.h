@@ -57,80 +57,80 @@ namespace cute {
 	};
 	class ArgvTestFilter
 	{
-	    std::set<std::string> match;
-	    bool shouldRunSuite(std::string const &info, std::vector<std::string> const &args)
-	    {
-	        if(!args.size() || !info.size())
-	            return true;
-	        if(args.end() != find_if(args.begin(), args.end(), prefixMatcher(info))){
-	           std::transform(args.begin(), args.end(), std::inserter(match,match.begin()),prefixCutter(info));
-	           match.erase(std::string()); // get rid of empty string
-	           return true;
-	        }
-	        return false;
-	    }
+		std::set<std::string> match;
+		bool shouldRunSuite(std::string const &info, std::vector<std::string> const &args)
+		{
+			if(!args.size() || !info.size())
+				return true;
+			if(args.end() != find_if(args.begin(), args.end(), prefixMatcher(info))){
+			   std::transform(args.begin(), args.end(), std::inserter(match,match.begin()),prefixCutter(info));
+			   match.erase(std::string()); // get rid of empty string
+			   return true;
+			}
+			return false;
+		}
 	public:
-	    bool const shouldrunsuite;
+		bool const shouldrunsuite;
 		ArgvTestFilter(std::string const &info, std::vector<std::string> const &args)
 		:shouldrunsuite(shouldRunSuite(info,args)){}
-	    bool shouldRun(const std::string & name) const
-	    {
-	        return match.empty() || match.count(name);
-	    }
+		bool shouldRun(const std::string & name) const
+		{
+			return match.empty() || match.count(name);
+		}
 	};
 	} // namespace runner_aux
 	template <typename Listener=null_listener>
 	struct runner{
 		Listener &listener;
-	    std::vector<std::string> args;
+		std::vector<std::string> args;
 		runner(Listener &l, int argc = 0, const char *const *argv = 0):listener(l){
-	        if(needsFiltering(argc,argv)){
-	        	args.reserve(argc-1);
-	            std::remove_copy_if(argv + 1, argv + argc,back_inserter(args),std::logical_not<char const *>());
-	        }
+			if(needsFiltering(argc,argv)){
+				args.reserve(argc-1);
+				std::remove_copy_if(argv + 1, argv + argc,back_inserter(args),std::logical_not<char const *>());
+			}
 		}
 		bool operator()(const test & t) const
-	    {
-	        return runit(t);
-	    }
+		{
+			return runit(t);
+		}
 
-	    bool operator ()(suite const &s, const char *info = "") const
-	    {
-	    	runner_aux::ArgvTestFilter filter(info,args);
+		bool operator ()(suite const &s, const char *info = "") const
+		{
+			runner_aux::ArgvTestFilter filter(info,args);
 
-	        bool result = true;
-	        if(filter.shouldrunsuite){
-	            listener.begin(s, info,
-	            		count_if(s.begin(),s.end(),boost_or_tr1::bind(&runner_aux::ArgvTestFilter::shouldRun,filter,boost_or_tr1::bind(&test::name,_1))));
-	            for(suite::const_iterator it = s.begin();it != s.end();++it){
-	                if (filter.shouldRun(it->name())) result = this->runit(*it) && result;
-	            }
-	            listener.end(s, info);
-	        }
+			bool result = true;
+			if(filter.shouldrunsuite){
+				listener.begin(s, info,
+						count_if(s.begin(),s.end(),boost_or_tr1::bind(&runner_aux::ArgvTestFilter::shouldRun,filter,boost_or_tr1::bind(&test::name,_1))));
+				for(suite::const_iterator it = s.begin();it != s.end();++it){
+					if (filter.shouldRun(it->name())) result = this->runit(*it) && result;
+				}
+				listener.end(s, info);
+			}
 
-	        return result;
-	    }
+			return result;
+		}
 	private:
-	    bool needsFiltering(int argc, const char *const *argv) const
-	    {
-	        return argc > 1 && argv ;
-	    }
+		bool needsFiltering(int argc, const char *const *argv) const
+		{
+			return argc > 1 && argv ;
+		}
 
 
-	    bool runit(const test & t) const
-	    {
-	        try {
-	            listener.start(t);
-	            t();
-	            listener.success(t, "OK");
-	            return true;
-	        } catch(const cute::test_failure & e){
-	            listener.failure(t, e);
-	        } catch(const std::exception & exc){
-	            listener.error(t, demangle(exc.what()).c_str());
-	        } catch(std::string & s){
-	            listener.error(t, s.c_str());
-	        } catch(const char *&cs) {
+		bool runit(const test & t) const
+		{
+			try {
+				listener.start(t);
+				t();
+				listener.success(t, "OK");
+				return true;
+			} catch(const cute::test_failure & e){
+				listener.failure(t, e);
+			} catch(const std::exception & exc){
+				listener.error(t, demangle(exc.what()).c_str());
+			} catch(std::string & s){
+				listener.error(t, s.c_str());
+			} catch(const char *&cs) {
 				listener.error(t,cs);
 			} catch(...) {
 				listener.error(t,"unknown exception thrown");

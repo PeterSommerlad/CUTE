@@ -102,15 +102,15 @@ namespace cute {
 		// do not forget the inline on a non-template overload!
 		// this overload is needed to actually avoid ambiguity for comparing bool==bool as a best match
 		inline bool do_equals(bool const &expected
-				      ,bool const &actual
-				      , const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
+					  ,bool const &actual
+					  , const impl_place_for_traits::true_type&,const impl_place_for_traits::true_type&){
 			return expected==actual;
 		}
 		// overload for char const *, my test case failed because VC++ doesn't use string constant folding like g++/clang
 		// a feature where we should do string comparison
 		inline bool do_equals(char const *const &expected
-				      ,char const *const &actual
-				      , const impl_place_for_traits::false_type&,const impl_place_for_traits::false_type&){
+					  ,char const *const &actual
+					  , const impl_place_for_traits::false_type&,const impl_place_for_traits::false_type&){
 			return std::string(expected) == actual;
 		}
 		template <typename IntegralType>
@@ -173,7 +173,7 @@ namespace cute {
 			typedef typename impl_place_for_traits::make_signed<ExpectedValue>::type ex_s;
 			typedef typename impl_place_for_traits::make_signed<ActualValue>::type ac_s;
 				// need to sign extend with the longer type, should work...
-			    // might be done through more template meta prog tricks....but...
+				// might be done through more template meta prog tricks....but...
 				if (nof_bits(expected) < nof_bits(actual))
 					return static_cast<ac_s>(expected) == static_cast<ac_s>(actual);
 				else

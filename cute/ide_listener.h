@@ -73,11 +73,11 @@ namespace cute {
 		}
 	protected:
 		struct blankToUnderscore{
-            char operator()(char in) const {
+			char operator()(char in) const {
 			if (in == ' ') return '_';
 			return in;
 		}
-        };
+		};
 		std::ostream &out;
 	};
 }
