@@ -17,7 +17,7 @@ struct xml_file_opener {
 	xml_file_opener(int argc, char const *const* argv)
 	:filename(argc>0&&argv[0]?basename(argv[0]):"testresult.xml")
 	,out(filename.c_str()){}
-	std::string basename(std::string path){
+	static std::string basename(std::string path){
 #if defined( _MSC_VER ) || defined(__MINGW32__)
 		char const sep='\\';
 #else
