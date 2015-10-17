@@ -52,8 +52,8 @@ namespace cute {
 		template <typename ExpectedValue, typename ActualValue, bool select_non_integral_type>
 		bool do_equals(ExpectedValue const &expected
 					,ActualValue const &actual
-					,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&exp_is_integral
-					,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&act_is_integral){
+					,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&/*exp_is_integral*/
+					,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&/*act_is_integral*/){
 			return do_equals_floating(expected,actual,impl_place_for_traits::is_floating_point<ExpectedValue>());
 		}
 		template <typename ExpectedValue, typename ActualValue, bool select_non_integral_type>
@@ -65,14 +65,14 @@ namespace cute {
 		template <typename ExpectedValue, typename ActualValue, bool select_non_integral_type>
 		bool do_equals(ExpectedValue const &expected
 					,ActualValue const &actual
-					,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&exp_is_integral
+					,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&/*exp_is_integral*/
 					,const impl_place_for_traits::true_type&){
 			return do_equals_floating(expected,actual,impl_place_for_traits::is_floating_point<ExpectedValue>());
 		}
 		template <typename ExpectedValue, typename ActualValue, bool select_non_integral_type>
 		bool do_equals(ExpectedValue const &expected
 					,ActualValue const &actual
-					,const impl_place_for_traits::true_type&,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&act_is_integral){
+					,const impl_place_for_traits::true_type&,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&/*act_is_integral*/){
 			return do_equals_floating(expected,actual,impl_place_for_traits::is_floating_point<ActualValue>());
 		}
 		// can I get rid of the following complexity by doing a do_equals_integral
