@@ -123,7 +123,7 @@ namespace cute_to_string {
 		//try print_pair with specialization of template function instead:
 		// the generic version prints about missing operator<< that is the last resort
 		template <typename T>
-		std::ostream &print_pair(std::ostream &os,T const &t){
+		std::ostream &print_pair(std::ostream &os,T const &/*t*/){
 			return os << "no operator<<(ostream&, " <<cute::demangle(typeid(T).name())<<')';
 		}
 		//the std::pair overload is useful for std::map etc. however,
@@ -196,7 +196,7 @@ namespace cute_to_string {
 			return os<<s;
 		} // needed to compensate for following overload, hope nothing else matches
 		template <template<typename,typename,typename> class S,
-		          typename K, typename CMP, typename ALLOC>
+				  typename K, typename CMP, typename ALLOC>
 		std::ostream &to_stream(std::ostream &os,S<K,CMP,ALLOC> const &t){
 			printItWithDelimiter<typename S<K,CMP,ALLOC>::value_type> printer(os);
 			os << cute::demangle(typeid(S<K,CMP,ALLOC>).name()) << '{';
@@ -267,7 +267,7 @@ namespace cute_to_string {
 			return to_string_embedded_int_signed(t,impl_place_for_traits::is_signed<T>());
 		}
 		template <typename T>
-		std::string to_string_embedded_int(T const &t, impl_place_for_traits::false_type ){
+		std::string to_string_embedded_int(T const &/*t*/, impl_place_for_traits::false_type ){
 			return "no to_string";
 		}
 		// convenience for pointers.... useful?
