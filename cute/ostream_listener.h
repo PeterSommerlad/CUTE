@@ -30,7 +30,7 @@ namespace cute {
 		std::ostream &out;
 	public:
 		ostream_listener(std::ostream &os=std::cerr):out(os) {}
-		void begin(suite const &t,char const *info, size_t n_of_tests=t.size()){
+		void begin(suite const &t,char const *info, size_t n_of_tests){
 			out << "beginning: " << info << std::endl;
 			Listener::begin(t,info, n_of_tests);
 		}
