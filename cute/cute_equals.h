@@ -27,6 +27,9 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
+#ifdef USE_STD11
+#include <tuple>
+#endif
 
 
 namespace cute {
@@ -78,6 +81,13 @@ namespace cute {
 					,const impl_place_for_traits::true_type&,const impl_place_for_traits::integral_constant<bool, select_non_integral_type>&/*act_is_integral*/){
 			return do_equals_floating(expected,actual,impl_place_for_traits::is_floating_point<ActualValue>());
 		}
+#ifdef USE_STD11
+		template <bool select_non_floating_point_type, typename ...ExpectedTypes, typename ...ActualTypes>
+		bool do_equals(std::tuple<ExpectedTypes...> const &expected
+					,std::tuple<ActualTypes...> const &actual,const std::integral_constant<bool, select_non_floating_point_type>&){
+					return expected==actual;
+		}
+#endif
 		// can I get rid of the following complexity by doing a do_equals_integral
 		// parameterized by is_signed<ExpectedValue>==is_signed<ActualValue> or nofBits<A> < nofBits<B>
 

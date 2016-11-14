@@ -66,6 +66,11 @@ namespace cute_to_string {
 #include <set>
 #endif
 #include "cute_demangle.h"
+#include "cute_determine_version.h"
+#ifdef USE_STD11
+#include "cute_integer_sequence.h"
+#include <tuple>
+#endif
 namespace cute {
 namespace cute_to_string {
 		template <typename T>
@@ -145,6 +150,40 @@ namespace cute_to_string {
 			return os << '}';
 		}
 
+#ifdef USE_STD11
+		template<std::size_t Value>
+		using size = std::integral_constant<std::size_t, Value>;
+		struct empty { template<typename ...Types>empty(Types const &...){} };
+		template<typename ...Types, std::size_t _, std::size_t Head, std::size_t ...Indices>
+		std::ostream &print_tuple(std::ostream &os, std::tuple<Types...> const &t, size<_> const, index_sequence<Head, Indices...>){
+			empty{cute_to_string::to_stream(os, std::get<Head>(t))
+			      ,(os << ',', cute_to_string::to_stream(os, std::get<Indices>(t)))...};
+			return os;
+		}
+		template<typename ...Types, std::size_t _, std::size_t ...Indices>
+		std::ostream &print_tuple(std::ostream &os, std::tuple<Types...> const &t, size<_> const s) {
+			return print_tuple(os, t, s, index_sequence_for<Types...>{});
+		}
+		template<typename ..._>
+		std::ostream &print_tuple(std::ostream &os, std::tuple<_...> const &t, size<1> const){
+			return cute_to_string::to_stream(os, std::get<0>(t));
+		}
+		template<typename ..._>
+		std::ostream &print_tuple(std::ostream &os, std::tuple<_...> const &, size<0>){
+			return os;
+		}
+		// overload for std::tuple<...>
+		template<typename ...Types>
+		std::ostream &print_pair(std::ostream &os, std::tuple<Types...> const &t){
+			os << cute::demangle(typeid(decltype(t)).name()) << '{';
+			auto olflags = os.flags();
+			os << std::boolalpha;
+			print_tuple(os, t, size<sizeof...(Types)>{});
+			os.flags(olflags);
+			os << '}';
+			return os;
+		}
+#endif
 		template <typename T, bool select>
 		struct select_container {
 			std::ostream &os;
