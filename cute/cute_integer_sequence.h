@@ -41,11 +41,11 @@ namespace cute {
 		};
 
 		template<typename, typename, typename>
-		struct prepend;
+		struct flatten;
 
 		template<typename IntType, IntType ...Lhs, IntType ...Rhs>
-		struct prepend<IntType, integer_sequence<IntType, Lhs...>, integer_sequence<IntType, Rhs...>>
-			: integer_sequence<IntType, Lhs..., Rhs...> {};
+		struct flatten<IntType, integer_sequence<IntType, Lhs...>, integer_sequence<IntType, Rhs...>>
+			: integer_sequence<IntType, Lhs..., (sizeof...(Lhs) + Rhs)...> {};
 
 		template<typename IntType, std::size_t Last>
 		struct make_integer_sequence;
@@ -60,8 +60,8 @@ namespace cute {
 
 		template<typename IntType, std::size_t Last>
 		struct make_integer_sequence
-			: prepend<IntType, typename make_integer_sequence<IntType, Last - 1>::type,
-			                   typename integer_sequence<IntType, Last - 1>::type>::type {};
+			: flatten<IntType, typename make_integer_sequence<IntType, Last / 2>::type,
+			                   typename make_integer_sequence<IntType, Last - Last / 2>::type>::type {};
 
 		template<std::size_t Last>
 		using make_index_sequence = make_integer_sequence<std::size_t, Last>;
