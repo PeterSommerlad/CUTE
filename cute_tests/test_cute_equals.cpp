@@ -95,7 +95,7 @@ void test_equals_unsignedshortlimit_long(){
 	unsigned short max = std::numeric_limits<unsigned short>::max();
 	ASSERT_EQUAL(max,static_cast<long>(max));
 }
-void test_equql_bool_bool(){
+void test_equal_bool_bool(){
 	ASSERT_EQUAL(true,true);
 }
 void test_equal_bool_int(){
@@ -169,7 +169,12 @@ void test_output_for_std_pair(){
 	std::ostringstream out;
 	cute::cute_to_string::to_stream(out,std::pair<std::string,int>("answer",42));
 	ASSERT_EQUAL("[answer -> 42]",out.str());
+}
 
+void test_output_for_std_tuple(){
+	std::ostringstream out;
+	cute::cute_to_string::to_stream(out,std::tuple<int,int>(7,42));
+	ASSERT_EQUAL("std::tuple<int, int>{\n7,\n42}",out.str());
 }
 
 void test_output_for_vector_pair(){
@@ -258,7 +263,7 @@ cute::suite test_cute_equals(){
 	s.push_back(CUTE(test_equals_signed_limit_short));
 	s.push_back(CUTE(test_equals_unsigned_limit_short));
 	s.push_back(CUTE(test_equals_unsignedshortlimit_long));
-	s.push_back(CUTE(test_equql_bool_bool));
+	s.push_back(CUTE(test_equal_bool_bool));
 	s.push_back(CUTE(test_equal_bool_int));
 	s.push_back(CUTE(test_equal_int_bool));
 	s.push_back(CUTE(test_equal_enum_int));
@@ -268,6 +273,7 @@ cute::suite test_cute_equals(){
 	s.push_back(CUTE(test_has_begin_end_member_for_string));
 	s.push_back(CUTE(test_output_for_std_map));
 	s.push_back(CUTE(test_output_for_std_pair));
+	s.push_back(CUTE(test_output_for_std_tuple));
 	s.push_back(CUTE(test_output_for_std_map_empty));
 	s.push_back(CUTE(test_output_for_vector_pair));
 	s.push_back(CUTE(test_output_for_vector_set_int_empty));
