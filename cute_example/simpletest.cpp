@@ -53,15 +53,9 @@ int anotherTest(){
 }
 
 cute::test tests[]={
-#ifdef __GNUG__
 	CUTE(mySimpleTest)
 	,mySimpleTest
 	,CUTE(anotherTest)
-#else /* for MSVC... */
-	CUTE(mySimpleTest)
-	,CUTE(mySimpleTest)
-	,CUTE(reinterpret_cast<void(*)()>(anotherTest))
-#endif
 };
 
 struct ATestFunctor {
