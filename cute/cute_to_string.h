@@ -156,17 +156,18 @@ namespace cute_to_string {
 		struct empty { template<typename ...Types>empty(Types const &...){} };
 		template<typename ...Types, std::size_t _, std::size_t Head, std::size_t ...Indices>
 		std::ostream &print_tuple(std::ostream &os, std::tuple<Types...> const &t, size<_> const, index_sequence<Head, Indices...>){
-			empty{cute_to_string::to_stream(os, std::get<Head>(t))
-			      ,(os << ',', cute_to_string::to_stream(os, std::get<Indices>(t)))...};
+			empty{os << '\n'
+			      ,cute_to_string::to_stream(os, std::get<Head>(t))
+			      ,(os << ",\n", cute_to_string::to_stream(os, std::get<Indices>(t)))...};
 			return os;
 		}
-		template<typename ...Types, std::size_t _, std::size_t ...Indices>
+		template<typename ...Types, std::size_t _>
 		std::ostream &print_tuple(std::ostream &os, std::tuple<Types...> const &t, size<_> const s) {
 			return print_tuple(os, t, s, index_sequence_for<Types...>{});
 		}
 		template<typename ..._>
 		std::ostream &print_tuple(std::ostream &os, std::tuple<_...> const &t, size<1> const){
-			return cute_to_string::to_stream(os, std::get<0>(t));
+			return os << '\n', cute_to_string::to_stream(os, std::get<0>(t));
 		}
 		template<typename ..._>
 		std::ostream &print_tuple(std::ostream &os, std::tuple<_...> const &, size<0>){
