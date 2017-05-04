@@ -42,6 +42,7 @@
 #include "test_cute_filter_runner.h"
 #include "test_cute_relops.h"
 #include "test_cute_data_driven.h"
+#include "test_tap_listener.h"
 
 using namespace cute;
 // some brain dead test cases to find out my bug using function
@@ -105,6 +106,7 @@ int main(int argc, char const *argv[]){
 	s += make_suite_test_xml_listener();
 	s += make_suite_test_xml_file_opener();
 	s += make_suite_test_cute_to_string_embedded();
+	s += make_suite_test_tap_listener();
 	s += test_cute_to_string();
 	s += test_cute_equals();
 	// the following test produces one of the 2 expected errors, since it throws
