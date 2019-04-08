@@ -42,7 +42,7 @@ namespace cute {
 	{
 		ide_listener(std::ostream &os=std::cout):out(os) {}
 		void begin(suite const &t,char const *info, size_t n_of_tests){
-			out << std::dec << "\n#beginning " << info << " " << n_of_tests << '\n';
+			out << std::dec << "\n#beginning " << info << " " << n_of_tests << std::endl;
 			Listener::begin(t,info,n_of_tests);
 		}
 		void end(suite const &t, char const *info){
@@ -50,15 +50,15 @@ namespace cute {
 			Listener::end(t,info);
 		}
 		void start(test const &t){
-			out << "\n#starting " << t.name()<<'\n';
+			out << "\n#starting " << t.name() << std::endl;
 			Listener::start(t);
 		}
 		void success(test const &t, char const *msg){
-			out << "\n#success " <<  maskBlanks(t.name()) <<" " << msg<< '\n';
+			out << "\n#success " <<  maskBlanks(t.name()) << " " << msg<< std::endl;
 			Listener::success(t,msg);
 		}
 		void failure(test const &t,test_failure const &e){
-			out << std::dec <<  "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n';
+			out << std::dec <<  "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << std::endl;
 			Listener::failure(t,e);
 #ifdef _MSV_VER
 			std::ostringstream os;
@@ -67,7 +67,7 @@ namespace cute {
 #endif
 		}
 		void error(test const &t, char const *what){
-			out << "\n#error " << maskBlanks(t.name()) << " " << what <<'\n';
+			out << "\n#error " << maskBlanks(t.name()) << " " << what << std::endl;
 			Listener::error(t,what);
 #ifdef _MSV_VER
 			std::ostringstream os;
