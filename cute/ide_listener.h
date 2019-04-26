@@ -42,36 +42,36 @@ namespace cute {
 	{
 		ide_listener(std::ostream &os=std::cout):out(os) {}
 		void begin(suite const &t,char const *info, size_t n_of_tests){
-			out << std::dec << "\n#beginning " << info << " " << n_of_tests << '\n';
+			out << std::dec << "\n#beginning " << info << " " << n_of_tests << '\n' << std::flush;
 			Listener::begin(t,info,n_of_tests);
 		}
 		void end(suite const &t, char const *info){
-			out << "\n#ending " << info << std::endl;
+			out << "\n#ending " << info << '\n' << std::flush;
 			Listener::end(t,info);
 		}
 		void start(test const &t){
-			out << "\n#starting " << t.name()<<'\n';
+			out << "\n#starting " << t.name() << '\n' << std::flush;
 			Listener::start(t);
 		}
 		void success(test const &t, char const *msg){
-			out << "\n#success " <<  maskBlanks(t.name()) <<" " << msg<< '\n';
+			out << "\n#success " <<  maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
 			Listener::success(t,msg);
 		}
 		void failure(test const &t,test_failure const &e){
-			out << std::dec <<  "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n';
+			out << std::dec <<  "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
 			Listener::failure(t,e);
 #ifdef _MSV_VER
 			std::ostringstream os;
-			os << std::dec << e.filename << "(" << e.lineno << ") : failure: " <<e.reason << " in " << t.name()<< std::endl;
+			os << std::dec << e.filename << "(" << e.lineno << ") : failure: " <<e.reason << " in " << t.name() << '\n' << std::flush;
 			OutputDebugString(os.str().c_str());
 #endif
 		}
 		void error(test const &t, char const *what){
-			out << "\n#error " << maskBlanks(t.name()) << " " << what <<'\n';
+			out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
 			Listener::error(t,what);
 #ifdef _MSV_VER
 			std::ostringstream os;
-			os << what << " error in " << t.name() << std::endl;
+			os << what << " error in " << t.name() << '\n' << std::flush;
 			OutputDebugString(os.str().c_str());
 #endif
 		}
