@@ -43,4 +43,8 @@
 #if __cplusplus >= 201402L
 #define USE_STD14
 #endif
+
+#if __cplusplus >= 201703L
+#define USE_STD17
+#endif
 #endif /*CUTE_DETERMINE_VERSION_H_*/

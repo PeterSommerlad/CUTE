@@ -101,6 +101,20 @@ void test_multimap_to_string(){
 	ASSERT_EQUAL(exp,res);
 // MS VC++ will not detect std::map/std::set as a container, because their begin/end member functions are defined in their superclass... :-(
 }
+#if defined(USE_STD17)
+void test_byte_to_string(){
+	std::byte b{42};
+	std::string exp="0x2A";
+	std::string res=to_string(b);
+	ASSERT_EQUAL(exp,res);
+}
+void test_vector_of_byte_to_string(){
+	std::vector<std::byte> v{static_cast<std::byte>(21), static_cast<std::byte>(42)};
+	std::string exp="std::vector<std::byte, std::allocator<std::byte> >{\n0x15,\n0x2A}";
+	std::string res=to_string(v);
+	ASSERT_EQUAL(exp,res);
+}
+#endif
 
 
 
@@ -122,6 +136,10 @@ cute::suite test_cute_to_string(){
 	s.push_back(CUTE(test_map_to_string));
 	s.push_back(CUTE(test_multimap_to_string));
 	s.push_back(CUTE(test_multiset_to_string));
+#if defined(USE_STD17)
+	s.push_back(CUTE(test_byte_to_string));
+	s.push_back(CUTE(test_vector_of_byte_to_string));
+#endif
 	return s;
 
 }
