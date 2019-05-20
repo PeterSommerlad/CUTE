@@ -35,7 +35,7 @@ namespace cute {
 
 	template<typename Listener=null_listener>
 	struct tap_listener : Listener {
-		tap_listener(std::ostream & out = std::cout) : out{out} { }
+		tap_listener(std::ostream & out = std::cout) : out(out),nofTests(0) { }
 
 		~tap_listener() {
 			if (nofTests) {
@@ -77,7 +77,7 @@ namespace cute {
 
 	private:
 		std::ostream & out;
-		std::size_t nofTests{};
+		std::size_t nofTests;
 	};
 
 }

@@ -142,5 +142,5 @@ int main(int argc, char const *argv[]){
 	cerr << l.numberOfTests << " Tests - expect " << s.size() << endl;
 	cerr << l.failedTests << " failed - expect 0 failures" << endl;
 	cerr << l.errors << " errors - expect 0 errors" << endl;
-	return l.failedTests;
+	return int(l.failedTests);//silence warning
 }

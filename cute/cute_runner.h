@@ -93,7 +93,6 @@ namespace cute {
 	    std::vector<std::string> args;
 		runner(Listener &l, int argc = 0, const char *const *argv = 0):listener(l){
 	        if(needsFiltering(argc,argv)){
-	        	args.reserve(argc-1);
 	            std::remove_copy_if(argv + 1, argv + argc,back_inserter(args),std::logical_not<char const *>());
 	        }
 		}
@@ -108,7 +107,7 @@ namespace cute {
 
 	        bool result = true;
 	        if(filter.shouldrunsuite){
-	            listener.begin(s, info,
+	            listener.begin(s, info, (size_t)
 	            		count_if(s.begin(),s.end(),boost_or_tr1::bind(&runner_aux::ArgvTestFilter::shouldRun,filter,boost_or_tr1::bind(&test::name,_1))));
 	            for(suite::const_iterator it = s.begin();it != s.end();++it){
 	                if (filter.shouldRun(it->name())) result = this->runit(*it) && result;

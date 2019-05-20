@@ -175,13 +175,13 @@ void test_output_for_std_pair(){
 	cute::cute_to_string::to_stream(out,std::pair<std::string,int>("answer",42));
 	ASSERT_EQUAL("[answer -> 42]",out.str());
 }
-
+#ifdef USE_STD11
 void test_output_for_std_tuple(){
 	std::ostringstream out;
 	cute::cute_to_string::to_stream(out,std::tuple<int,int>(7,42));
 	ASSERT_EQUAL("std::tuple<int, int>{\n7,\n42}",out.str());
 }
-
+#endif
 void test_output_for_vector_pair(){
 	typedef std::vector<std::pair<int,int> > Vec;
 	Vec v;
@@ -278,7 +278,9 @@ cute::suite test_cute_equals(){
 	s.push_back(CUTE(test_has_begin_end_member_for_string));
 	s.push_back(CUTE(test_output_for_std_map));
 	s.push_back(CUTE(test_output_for_std_pair));
+#ifdef USE_STD11
 	s.push_back(CUTE(test_output_for_std_tuple));
+#endif
 	s.push_back(CUTE(test_output_for_std_map_empty));
 	s.push_back(CUTE(test_output_for_vector_pair));
 	s.push_back(CUTE(test_output_for_vector_set_int_empty));

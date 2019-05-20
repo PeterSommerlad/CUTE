@@ -49,6 +49,7 @@ void test_embedded_integral_to_string(){
 	ASSERT_EQUAL("0",to_string(0));
 	ASSERT_EQUAL("42",to_string(42));
 }
+#ifdef USE_STD11
 void test_embedded_integral_long_long_to_string(){
 	if (sizeof(1L)<sizeof(1LL)){
 		ASSERT_EQUAL("1LL",to_string(1LL));
@@ -58,7 +59,14 @@ void test_embedded_integral_long_long_to_string(){
 		ASSERT_EQUAL("0x1L",to_string(1ULL));
 	}
 }
-
+void test_embedded_unsigned_long_long_to_string(){
+	if (sizeof(42ull)>sizeof(unsigned long)){
+		ASSERT_EQUAL("0x2ALL",to_string(42ull));
+	} else {
+		ASSERT_EQUAL("0x2AL",to_string(42ull));
+	}
+}
+#endif
 void test_embedded_unsigned_to_string(){
 	ASSERT_EQUAL("0x0",to_string(0u));
 
@@ -72,13 +80,7 @@ void test_embedded_unsigned_long_to_string(){
 	if (sizeof(unsigned)<sizeof(unsigned long)) expect+="L";
 	ASSERT_EQUAL(expect,to_string(42ul));
 }
-void test_embedded_unsigned_long_long_to_string(){
-	if (sizeof(42ull)>sizeof(unsigned long)){
-		ASSERT_EQUAL("0x2ALL",to_string(42ull));
-	} else {
-		ASSERT_EQUAL("0x2AL",to_string(42ull));
-	}
-}
+
 void test_embedded_minint_to_string(){
 	ASSERT_EQUAL("-32768",to_string(std::numeric_limits<short>::min()));
 	ASSERT_EQUAL("-32767",to_string(std::numeric_limits<short>::min()+1));
@@ -101,10 +103,12 @@ cute::suite make_suite_test_cute_to_string_embedded(){
 	s.push_back(CUTE(test_embedded_integral_to_string));
 	s.push_back(CUTE(test_embedded_unsigned_to_string));
 	s.push_back(CUTE(test_embedded_unsigned_long_to_string));
-	s.push_back(CUTE(test_embedded_unsigned_long_long_to_string));
 	s.push_back(CUTE(test_embedded_minint_to_string));
 	s.push_back(CUTE(test_embedded_pointer_to_string));
+#ifdef USE_STD11
+	s.push_back(CUTE(test_embedded_unsigned_long_long_to_string));
 	s.push_back(CUTE(test_embedded_integral_long_long_to_string));
+#endif
 	return s;
 }
 

@@ -52,11 +52,11 @@ void test_int_array_to_string(){
 void test_pair_to_string(){
 	ASSERT_EQUAL("[1 -> hallo]",to_string(std::make_pair(1,std::string("hallo"))));
 }
-
+#ifdef USE_STD11
 void test_tuple_to_string(){
 	ASSERT_EQUAL("std::tuple<int, int>{\n7,\n42}",to_string(std::tuple<int,int>(7,42)));
 }
-
+#endif
 void test_vector_pair_to_string(){
 	typedef std::vector<std::pair<int,int> > Vec;
 	Vec v;
@@ -130,7 +130,9 @@ cute::suite test_cute_to_string(){
 	s.push_back(CUTE(test_simple_char_array_to_string));
 	s.push_back(CUTE(test_int_array_to_string));
 	s.push_back(CUTE(test_pair_to_string));
+#ifdef USE_STD11
 	s.push_back(CUTE(test_tuple_to_string));
+#endif
 	s.push_back(CUTE(test_vector_pair_to_string));
 	s.push_back(CUTE(test_set_to_string));
 	s.push_back(CUTE(test_map_to_string));
