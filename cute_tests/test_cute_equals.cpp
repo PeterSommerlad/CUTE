@@ -28,9 +28,15 @@
 #include "cute_equals.h"
 #include "cute_throws.h"
 #include <limits>
+#include <set>
+#include <sstream>
+#include <string>
+#ifdef USE_STD11
+#include <tuple>
+#endif
+#include <utility>
+#include <vector>
 
-#include <iostream>
-#include <iomanip>
 
 void test_equals_OK() {
 	int fourtytwo = 42;
@@ -178,7 +184,7 @@ void test_output_for_std_pair(){
 #ifdef USE_STD11
 void test_output_for_std_tuple(){
 	std::ostringstream out;
-	cute::cute_to_string::to_stream(out,std::tuple<int,int>(7,42));
+	cute::cute_to_string::to_stream(out,std::tuple<int,int>(7,42)); // @suppress("Ambiguous problem")
 	ASSERT_EQUAL("std::tuple<int, int>{\n7,\n42}",out.str());
 }
 #endif
@@ -190,7 +196,7 @@ void test_output_for_vector_pair(){
 	cute::cute_to_string::to_stream(os,v);
 	ASSERT_EQUAL("std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >{\n[42 -> 4]}",(os.str()));
 }
-#include <set>
+
 void test_output_for_vector_set_int_empty(){
 	std::vector<std::set<int> > v;
 	std::ostringstream os;
@@ -254,6 +260,47 @@ void test_doubleEqualsWithANaNFails(){
 	ASSERT_THROWS(ASSERT_EQUAL_DELTA(0.0,std::numeric_limits<double>::quiet_NaN(),1.0),cute::test_failure);
 }
 
+// some more tests inspired by strong type wrappers
+struct Bool {
+	explicit operator bool() const {
+		return val;
+	}
+	explicit Bool(bool init=false):val{init}{}
+	bool val;
+};
+
+struct InterestingEqual{
+
+	friend Bool operator==(InterestingEqual const &l, InterestingEqual const &r){
+		return Bool(l.val==r.val);
+	}
+	friend Bool operator>=(InterestingEqual const &l, InterestingEqual const &r){
+		return Bool(l.val>=r.val);
+	}
+	friend InterestingEqual abs(InterestingEqual const &i) {
+		return {i.val < 0? -i.val:i.val};
+	}
+	friend InterestingEqual operator-(InterestingEqual const &l, InterestingEqual const &r) {
+		return {l.val - r.val};
+	}
+	int val;
+};
+
+void test_Customized_abs(){
+	InterestingEqual fourty{40};
+	InterestingEqual fourtytwo{42};
+	InterestingEqual three{3};
+	ASSERT_EQUAL_DELTA(fourty,fourtytwo,three);
+
+}
+void test_CustomizedEqualWithNon_bool_result(){
+	InterestingEqual fourtytwo{42};
+	ASSERT_EQUAL(fourtytwo,InterestingEqual{42});
+}
+
+
+
+
 
 cute::suite test_cute_equals(){
 	cute::suite s;
@@ -295,5 +342,7 @@ cute::suite test_cute_equals(){
 	s.push_back(CUTE(test_equals_strings_fails));
 	s.push_back(CUTE(test_diff_values));
 	s.push_back(CUTE(test_equalsTwoNaNFails));
+	s.push_back(CUTE(test_Customized_abs));
+	s.push_back(CUTE(test_CustomizedEqualWithNon_bool_result));
 	return s;
 }
