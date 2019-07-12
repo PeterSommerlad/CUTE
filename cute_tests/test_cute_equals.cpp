@@ -262,10 +262,13 @@ void test_doubleEqualsWithANaNFails(){
 
 // some more tests inspired by strong type wrappers
 struct Bool {
-	explicit operator bool() const {
+#ifdef USE_STD11
+	explicit
+#endif
+	operator bool() const {
 		return val;
 	}
-	explicit Bool(bool init=false):val{init}{}
+	explicit Bool(bool init=false):val(init){}
 	bool val;
 };
 
@@ -278,24 +281,25 @@ struct InterestingEqual{
 		return Bool(l.val>=r.val);
 	}
 	friend InterestingEqual abs(InterestingEqual const &i) {
-		return {i.val < 0? -i.val:i.val};
+		return InterestingEqual(i.val < 0? -i.val:i.val);
 	}
 	friend InterestingEqual operator-(InterestingEqual const &l, InterestingEqual const &r) {
-		return {l.val - r.val};
+		return InterestingEqual(l.val - r.val);
 	}
+	explicit InterestingEqual(int init=0):val(init){}
 	int val;
 };
 
 void test_Customized_abs(){
-	InterestingEqual fourty{40};
-	InterestingEqual fourtytwo{42};
-	InterestingEqual three{3};
+	InterestingEqual fourty(40);
+	InterestingEqual fourtytwo(42);
+	InterestingEqual three(3);
 	ASSERT_EQUAL_DELTA(fourty,fourtytwo,three);
 
 }
 void test_CustomizedEqualWithNon_bool_result(){
-	InterestingEqual fourtytwo{42};
-	ASSERT_EQUAL(fourtytwo,InterestingEqual{42});
+	InterestingEqual fourtytwo(42);
+	ASSERT_EQUAL(fourtytwo,InterestingEqual(42));
 }
 
 
