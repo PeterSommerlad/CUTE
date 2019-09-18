@@ -60,7 +60,7 @@ namespace cute {
 		void failure(test const &t,test_failure const &e){
 			out << std::dec <<  "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
 			Listener::failure(t,e);
-#ifdef _MSV_VER
+#ifdef _MSC_VER
 			std::ostringstream os;
 			os << std::dec << e.filename << "(" << e.lineno << ") : failure: " <<e.reason << " in " << t.name() << '\n' << std::flush;
 			OutputDebugString(os.str().c_str());
@@ -69,7 +69,7 @@ namespace cute {
 		void error(test const &t, char const *what){
 			out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
 			Listener::error(t,what);
-#ifdef _MSV_VER
+#ifdef _MSC_VER
 			std::ostringstream os;
 			os << what << " error in " << t.name() << '\n' << std::flush;
 			OutputDebugString(os.str().c_str());
