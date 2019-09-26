@@ -26,9 +26,10 @@
 #ifndef CUTE_BASE_H_
 #define CUTE_BASE_H_
 
-#include <string>
 #include "cute_to_string.h"
 #include "cute_determine_version.h"
+
+#include <string>
 
 namespace cute {
 	struct test_failure {

@@ -23,8 +23,9 @@
  *
  *********************************************************************************/
 
-#include "cute.h"
 #include "test_cute_to_string_embedded.h"
+#include "cute.h"
+#include "cute_determine_version.h"
 
 #undef CUTE_TO_STRING_H_
 #define DONT_USE_IOSTREAM 1

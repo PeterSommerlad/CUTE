@@ -28,6 +28,7 @@
 #include "cute_base.h"
 #include "cute_diff_values.h"
 #include "cute_determine_traits.h"
+#include "cute_determine_version.h"
 #include "cute_deprecated.h"
 #include "cute_range.h"
 #include <cmath>

@@ -25,6 +25,7 @@
 
 #include "test_cute_equals.h"
 #include "cute_base.h"
+#include "cute_determine_version.h"
 #include "cute_equals.h"
 #include "cute_throws.h"
 #include <limits>

@@ -26,7 +26,6 @@
 #ifndef CUTE_TEST_H_
 #define CUTE_TEST_H_
 
-#include "cute_determine_version.h"
 #include "cute_determine_library.h"
 #include "cute_demangle.h"
 
