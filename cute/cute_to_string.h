@@ -26,8 +26,6 @@
 #ifndef CUTE_TO_STRING_H_
 #define CUTE_TO_STRING_H_
 
-#include "cute_determine_version.h"
-
 #include <string>
 #include <algorithm>
 #ifdef USE_STD17
@@ -78,6 +76,7 @@ namespace cute_to_string {
 #include <set>
 #endif
 #include "cute_demangle.h"
+#include "cute_determine_version.h"
 #ifdef USE_STD11
 #include "cute_integer_sequence.h"
 #include <tuple>
@@ -111,8 +110,13 @@ namespace cute_to_string {
 			template <class CONT>
 			struct has_begin_end_const_member {
 				template <typename T, T, T> struct type_check;
+#ifdef USE_STD17
+				template <typename C> static typename C::const_iterator test(
+						type_check<typename C::const_iterator (C::*)()const noexcept,&C::begin, &C::end>*);
+#else
 				template <typename C> static typename C::const_iterator test(
 						type_check<typename C::const_iterator (C::*)()const,&C::begin, &C::end>*);
+#endif
 				template <typename C> static char test(...);
 				enum e { value = (sizeof(char) != sizeof(test<CONT>(0)))
 				};
@@ -300,9 +304,9 @@ namespace cute_to_string {
 			bool minint=false;
 			if (x == std::numeric_limits<T>::min()){ // can not easily convert it, assuming 2s complement
 				minint=true;
-				x +=1;
+				x++; // add 1, but 1 might be incompatible type, so use ++
 			}
-			if (x < 0) x = -x;
+			if (x < 0) x = static_cast<T>(-x);
 			if (x == 0) convert += '0';
 			while (x > 0) {
 				convert += "0123456789"[x%10];

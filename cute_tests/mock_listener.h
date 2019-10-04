@@ -29,13 +29,13 @@
 namespace cute_test {
 using namespace cute;
 struct mock_listener {
-	unsigned int begincount;
-	unsigned int endcount;
-	unsigned int startcount;
-	unsigned int successcount;
-	unsigned int failurecount;
-	unsigned int errorcount;
-	unsigned int suitetestcount;
+	size_t begincount;
+	size_t endcount;
+	size_t startcount;
+	size_t successcount;
+	size_t failurecount;
+	size_t errorcount;
+	size_t suitetestcount;
 	std::vector<std::string> infomessages;
 	std::vector<std::string>  errormessages;
 	std::vector<std::string>  successmessages;

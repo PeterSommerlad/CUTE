@@ -23,9 +23,10 @@
  *
  *********************************************************************************/
 
+#include "test_tap_listener.h"
+#ifdef USE_STD11
 #include "cute.h"
 #include "tap_listener.h"
-#include "test_tap_listener.h"
 #include <sstream>
 #include "cute_runner.h"
 #define MAKE_RUNNER_RUN_TO_OUT \
@@ -130,14 +131,17 @@ void test_tap_for_error(){
 		"# Unexpected exception: oops\n"
 		"1..1\n",out.str());
 }
+#endif
 
 cute::suite make_suite_test_tap_listener(){
 	cute::suite s;
+#ifdef USE_STD11
 	s.push_back(CUTE(test_tap_emptyrun));
 	s.push_back(CUTE(test_tap_single_success));
 	s.push_back(CUTE(test_tap_single_failure));
 	s.push_back(CUTE(test_tap_suite));
 	s.push_back(CUTE(test_tap_multiple_suites));
 	s.push_back(CUTE(test_tap_for_error));
+#endif
 	return s;
 }

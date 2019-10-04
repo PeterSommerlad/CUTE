@@ -43,15 +43,17 @@ inline std::string plain_demangle(char const *name){
 	::free(const_cast<char*>(toBeFreed));
 	return result;
 }
-#if defined(_LIBCPP_NAMESPACE) || defined(_GLIBCXX_USE_CXX11_ABI)
+#if defined(_LIBCPP_ABI_NAMESPACE) || defined(_LIBCPP_NAMESPACE) || defined(_GLIBCXX_USE_CXX11_ABI)
 inline void patch_library_namespace(std::string &mightcontaininlinenamespace) {
 // libc++ uses inline namespace std::_LIBCPP_NAMESPACE:: for its classes. This breaks the tests relying on meta information. re-normalize the names back to std::
 // libstdc++ (at least in version 6.3.1) puts some STL classes into the inline namespace std::_GLIBCXX_NAMESPACE_CXX11 if in C++11 mode
 	std::string::size_type pos=std::string::npos;
 #define XNS(X) #X
 #define NS(X) XNS(X)
-#ifdef _LIBCPP_NAMESPACE
+#if defined( _LIBCPP_NAMESPACE)
 #define TOREPLACE "::" NS(_LIBCPP_NAMESPACE)
+#elif defined(_LIBCPP_ABI_NAMESPACE)
+#define TOREPLACE  "::" NS(_LIBCPP_ABI_NAMESPACE)
 #else
 #define TOREPLACE "::" NS(_GLIBCXX_NAMESPACE_CXX11)
 #endif
@@ -77,7 +79,7 @@ inline void patchresultforstring(std::string& result) {
 inline std::string demangle(char const *name){
 	if (!name) return "unknown";
 	std::string result(cute_impl_demangle::plain_demangle(name));
-#if defined(_LIBCPP_NAMESPACE) || defined(_GLIBCXX_USE_CXX11_ABI)
+#if defined(_LIBCPP_ABI_NAMESPACE) || defined(_LIBCPP_NAMESPACE) || defined(_GLIBCXX_USE_CXX11_ABI)
 	cute_impl_demangle::patchresultforstring(result);
 #endif
 	return result;
