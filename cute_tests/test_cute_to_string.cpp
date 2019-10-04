@@ -23,8 +23,10 @@
  *
  *********************************************************************************/
 
-#include "cute_to_string.h"
 #include "test_cute_to_string.h"
+
+#include "cute_determine_version.h"
+#include "cute_to_string.h"
 #include "cute.h"
 #include <set>
 #include <map>

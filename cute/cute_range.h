@@ -26,6 +26,8 @@
 #ifndef CUTE_RANGE_H_
 #define CUTE_RANGE_H_
 
+#include "cute_determine_version.h"
+
 #include <iterator>
 #include <algorithm>
 #ifdef USE_STD11
@@ -44,7 +46,7 @@ namespace cute{
 		const_iterator end() const { return e; }
 		template <typename RangeOrContainer>
 		bool operator==(RangeOrContainer const &other) const{
-#if __cplusplus >= 201402L
+#ifdef USE_STD14
 			return std::equal(begin(),end(),other.begin(),other.end());
 #else
 			if (std::distance(begin(),end())==std::distance(other.begin(),other.end())){

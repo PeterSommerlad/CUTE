@@ -26,6 +26,8 @@
 #ifndef CUTE_TO_STRING_H_
 #define CUTE_TO_STRING_H_
 
+#include "cute_determine_version.h"
+
 #include <string>
 #include <algorithm>
 #ifdef USE_STD17
@@ -76,7 +78,6 @@ namespace cute_to_string {
 #include <set>
 #endif
 #include "cute_demangle.h"
-#include "cute_determine_version.h"
 #ifdef USE_STD11
 #include "cute_integer_sequence.h"
 #include <tuple>

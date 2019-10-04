@@ -25,6 +25,7 @@
 
 #ifndef CUTE_DETERMINE_LIBRARY_H_
 #define CUTE_DETERMINE_LIBRARY_H_
+#include "cute_determine_version.h"
 #if defined(USE_TR1)
 #include <tr1/functional>
 // bind already given by <functional> in cute_test.h from cute_suite.h

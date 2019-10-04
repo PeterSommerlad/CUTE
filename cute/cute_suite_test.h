@@ -26,7 +26,6 @@
 #ifndef CUTE_SUITE_TEST_H_
 #define CUTE_SUITE_TEST_H_
 #include "cute_suite.h"
-#include "cute_determine_version.h"
 #include "cute_determine_library.h"
 
 #include <algorithm>

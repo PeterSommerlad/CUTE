@@ -23,10 +23,10 @@
  *
  *********************************************************************************/
 
-#include "cute_determine_version.h"
-
 #ifndef CUTE_INTEGER_SEQUENCE_H_
 #define CUTE_INTEGER_SEQUENCE_H_
+
+#include "cute_determine_version.h"
 
 #ifdef USE_STD14
 #include <utility>
