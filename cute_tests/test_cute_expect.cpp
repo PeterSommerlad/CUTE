@@ -26,7 +26,10 @@
 #include "test_cute_expect.h"
 #include "cute_throws.h"
 #include "cute_equals.h"
+
+#include <exception>
 #include <stdexcept>
+#include <string>
 
 using namespace cute;
 namespace {
@@ -78,6 +81,14 @@ void test_throwing_with_demangle_failure_therefore_suite_should_be_inserted_inst
 void test_assert_throws_with_demangling_error(){
 	ASSERT_THROWS(test_throwing_with_demangle_failure_therefore_suite_should_be_inserted_instead_of_wrapped(),std::logic_error);
 }
+void test_throws_with_message_shows_the_message(){
+	std::string const message("this should be the message");
+	try {
+		ASSERT_THROWSM(message,no_exception(),std::exception);
+	} catch (cute::test_failure const &expectfail){
+		ASSERT_EQUAL(message,expectfail.reason);
+	}
+}
 }
 cute::suite test_cute_expect() {
 	cute::suite s;
@@ -90,6 +101,7 @@ cute::suite test_cute_expect() {
 	s += CUTE(test_assert_throws_is_safe_against_throwing_test_failure);
 	//s.push_back(CUTE(test_throwing_with_demangle_failure_therefore_suite_should_be_inserted_instead_of_wrapped));
 	s.push_back(CUTE(test_assert_throws_with_demangling_error));
+	s.push_back(CUTE(test_throws_with_message_shows_the_message));
 	return s;
 }
 

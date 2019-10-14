@@ -40,11 +40,11 @@ namespace cute {
 	}
 }
 
-#define ASSERT_THROWSM(msg,code,exc) \
+#define ASSERT_THROWSM(anuncommonmessagetextparametername,code,exc) \
 	do { \
 		try { \
 			{ code ; } \
-			throw cute::do_not_use_this_namespace::assert_throws_failure_exception(#msg,__FILE__,__LINE__); \
+			throw cute::do_not_use_this_namespace::assert_throws_failure_exception((anuncommonmessagetextparametername),__FILE__,__LINE__); \
 		} catch(exc const &){ \
 		} catch(cute::do_not_use_this_namespace::assert_throws_failure_exception const &atf){throw atf.original;} \
 	} while(0)
