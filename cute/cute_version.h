@@ -26,6 +26,6 @@
 #ifndef CUTE_VERSION_H_
 #define CUTE_VERSION_H_
 
-#define CUTE_LIB_VERSION "2.2.5"
+#define CUTE_LIB_VERSION "2.2.6"
 
 #endif /*CUTE_VERSION_H_*/
