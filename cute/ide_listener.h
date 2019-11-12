@@ -56,13 +56,16 @@ namespace cute {
 		void success(test const &t, char const *msg){
 #ifdef _MSC_VER
 			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-			CONSOLE_SCREEN_BUFFER_INFO csbi;
-			if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-				SetConsoleTextAttribute(hStdOut, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-				out << "\n#success " << maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
-				SetConsoleTextAttribute(hStdOut, csbi.wAttributes);
-			} else {
-				out << "\n#success " << maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
+			if (hStdOut != NULL && hStdOut != INVALID_HANDLE_VALUE) {
+				CONSOLE_SCREEN_BUFFER_INFO csbi;
+				if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+					WORD consoleAttributes = csbi.wAttributes & ~(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+					SetConsoleTextAttribute(hStdOut, consoleAttributes | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+					out << "\n#success " << maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
+					SetConsoleTextAttribute(hStdOut, csbi.wAttributes);
+				} else {
+					out << "\n#success " << maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
+				}
 			}
 #else
 			out << "\n#success " << maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
@@ -72,13 +75,16 @@ namespace cute {
 		void failure(test const &t,test_failure const &e){
 #ifdef _MSC_VER
 			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-			CONSOLE_SCREEN_BUFFER_INFO csbi;
-			if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-				SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
-				out << std::dec << "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
-				SetConsoleTextAttribute(hStdOut, csbi.wAttributes);
-			} else {
-				out << std::dec << "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
+			if (hStdOut != NULL && hStdOut != INVALID_HANDLE_VALUE) {
+				CONSOLE_SCREEN_BUFFER_INFO csbi;
+				if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+					WORD consoleAttributes = csbi.wAttributes & ~(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+					SetConsoleTextAttribute(hStdOut, consoleAttributes | FOREGROUND_RED | FOREGROUND_INTENSITY);
+					out << std::dec << "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
+					SetConsoleTextAttribute(hStdOut, csbi.wAttributes);
+				} else {
+					out << std::dec << "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
+				}
 			}
 
 			std::ostringstream os;
@@ -92,13 +98,16 @@ namespace cute {
 		void error(test const &t, char const *what){
 #ifdef _MSC_VER
 			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-			CONSOLE_SCREEN_BUFFER_INFO csbi;
-			if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
-				SetConsoleTextAttribute(hStdOut, FOREGROUND_RED | FOREGROUND_INTENSITY);
-				out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
-				SetConsoleTextAttribute(hStdOut, csbi.wAttributes);
-			} else {
-				out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
+			if (hStdOut != NULL && hStdOut != INVALID_HANDLE_VALUE) {
+				CONSOLE_SCREEN_BUFFER_INFO csbi;
+				if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+					WORD consoleAttributes = csbi.wAttributes & ~(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+					SetConsoleTextAttribute(hStdOut, consoleAttributes | FOREGROUND_RED | FOREGROUND_INTENSITY);
+					out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
+					SetConsoleTextAttribute(hStdOut, csbi.wAttributes);
+				} else {
+					out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
+				}
 			}
 
 			std::ostringstream os;
