@@ -50,4 +50,16 @@ namespace cute {
 	} while(0)
 #define ASSERT_THROWS(code,exc) ASSERT_THROWSM(" expecting " #code " to throw " #exc,code,exc)
 
+#define ASSERT_THROWS_CHECKM(anuncommonmessagetextparametername,code,exc, check_code) \
+	do { \
+		try { \
+			{ code ; } \
+			throw cute::do_not_use_this_namespace::assert_throws_failure_exception((anuncommonmessagetextparametername),__FILE__,__LINE__); \
+		} catch(exc const &e){ \
+			check_code ; \
+		} catch(cute::do_not_use_this_namespace::assert_throws_failure_exception const &atf){throw atf.original;} \
+	} while(0)
+#define ASSERT_THROWS_CHECK(code,exc,check_code) ASSERT_THROWS_CHECKM(" expecting " #code " to throw " #exc,code,exc,check_code)
+
+
 #endif /*CUTE_THROWS_H_*/
