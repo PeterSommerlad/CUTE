@@ -35,18 +35,26 @@ void mySimpleTest(){
 #include "ide_listener.h"
 #include <iostream>
 
-void main1(){
+int inline success_to_exitcode(bool success)
+{
+    return (success ? 0 : 1);
+}
+
+int main1(){
 	cute::ide_listener<> listener{};
-    if (cute::makeRunner(listener)(mySimpleTest)){
+    const bool success = cute::makeRunner(listener)(mySimpleTest);
+    if (success){
         std::cout << "success\n";
     } else {
         std::cout << "failure\n";
-    }   
+    }
+    return success_to_exitcode(success);
 }
 
-void main2(){
+int main2(){
     cute::ide_listener<> listener{};
-    cute::makeRunner(listener)(mySimpleTest);
+    const bool success = cute::makeRunner(listener)(mySimpleTest);
+    return success_to_exitcode(success);
 }
 
 #include "cute_test.h"
@@ -75,12 +83,16 @@ int main3(){
 	cute::ide_listener<> listener{};
     auto run = cute::makeRunner(listener);
     cute::suite s(tests, tests + (sizeof(tests) / sizeof(tests[0])));
-	s += ATestFunctor();
-	return run(s, "suite");
+    s += ATestFunctor();
+    const bool success = run(s, "suite");
+    return success_to_exitcode(success);
 }
 
 int main(){
-	main1();
-	main2();
-	main3();
+    int exit_code = 0;
+    exit_code |= main1();
+    exit_code |= main2();
+    exit_code |= main3();
+
+    return exit_code;
 }
