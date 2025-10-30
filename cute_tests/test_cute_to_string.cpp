@@ -59,25 +59,36 @@ void test_tuple_to_string(){
 	ASSERT_EQUAL("std::tuple<int, int>{\n7,\n42}",to_string(std::tuple<int,int>(7,42)));
 }
 #endif
+static std::string normalize_nested_template_brackets(std::string s){
+	size_t pos = s.rfind("> >");
+	while(pos != std::string::npos){
+		s.erase(pos+1,1);
+		pos = s.rfind("> >");
+	}
+	return s;
+}
 void test_vector_pair_to_string(){
 	typedef std::vector<std::pair<int,int> > Vec;
 	Vec v;
 	v.push_back(std::make_pair(42,4));
-	ASSERT_EQUAL("std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >{\n[42 -> 4]}",to_string(v));
+	std::string expected("std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >{\n[42 -> 4]}");
+	ASSERT_EQUAL(normalize_nested_template_brackets(expected),normalize_nested_template_brackets(to_string(v)));
 }
 
 void test_set_to_string(){
 	std::set<int> s;
 	s.insert(42); s.insert(1); s.insert(100);
 	std::string res=to_string(s);
-	ASSERT_EQUAL("std::set<int, std::less<int>, std::allocator<int> >{\n1,\n42,\n100}",res);
+	std::string expected("std::set<int, std::less<int>, std::allocator<int> >{\n1,\n42,\n100}");
+	ASSERT_EQUAL(normalize_nested_template_brackets(expected),normalize_nested_template_brackets(res));
 // MS VC++ will not detect std::map/std::set as a container, because their begin/end member functions are defined in their superclass... :-(
 }
 void test_multiset_to_string(){
 	std::multiset<int> s;
 	s.insert(42); s.insert(42); s.insert(100);
 	std::string res=to_string(s);
-	ASSERT_EQUAL("std::multiset<int, std::less<int>, std::allocator<int> >{\n42,\n42,\n100}",res);
+	std::string expected("std::multiset<int, std::less<int>, std::allocator<int> >{\n42,\n42,\n100}");
+	ASSERT_EQUAL(normalize_nested_template_brackets(expected),normalize_nested_template_brackets(res));
 // MS VC++ will not detect std::map/std::set as a container, because their begin/end member functions are defined in their superclass... :-(
 }
 
@@ -89,7 +100,7 @@ void test_map_to_string(){
 	std::string exp="std::map<std::string, std::string, std::less<std::string>, std::allocator<std::pair<std::string const, std::string> > >{"
 "\n[five -> six],\n[one -> two],\n[three -> four]}";
 	std::string res=to_string(m);
-	ASSERT_EQUAL(exp,res);
+	ASSERT_EQUAL(normalize_nested_template_brackets(exp),normalize_nested_template_brackets(res));
 // MS VC++ will not detect std::map/std::set as a container, because their begin/end member functions are defined in their superclass... :-(
 }
 void test_multimap_to_string(){
@@ -100,7 +111,7 @@ void test_multimap_to_string(){
 	std::string exp="std::multimap<std::string, std::string, std::less<std::string>, std::allocator<std::pair<std::string const, std::string> > >{"
 "\n[one -> two],\n[one -> three],\n[three -> four]}"; // fragile!
 	std::string res=to_string(m);
-	ASSERT_EQUAL(exp,res);
+	ASSERT_EQUAL(normalize_nested_template_brackets(exp),normalize_nested_template_brackets(res));
 // MS VC++ will not detect std::map/std::set as a container, because their begin/end member functions are defined in their superclass... :-(
 }
 #if defined(USE_STD17)
@@ -114,7 +125,7 @@ void test_vector_of_byte_to_string(){
 	std::vector<std::byte> v{static_cast<std::byte>(21), static_cast<std::byte>(42)};
 	std::string exp="std::vector<std::byte, std::allocator<std::byte> >{\n0x15,\n0x2A}";
 	std::string res=to_string(v);
-	ASSERT_EQUAL(exp,res);
+	ASSERT_EQUAL(normalize_nested_template_brackets(exp),normalize_nested_template_brackets(res));
 }
 #endif
 

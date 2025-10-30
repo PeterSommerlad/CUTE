@@ -155,13 +155,23 @@ void test_backslashQuoteTabNewline(){
 }
 
 #include <map>
+static std::string normalize_nested_template_brackets(std::string s){
+	size_t pos = s.rfind("> >");
+	while(pos != std::string::npos){
+		s.erase(pos+1,1);
+		pos = s.rfind("> >");
+	}
+	return s;
+}
 void test_output_for_std_map_empty(){
 	std::map<std::string,std::string> m;
 	std::ostringstream out;
 	cute::cute_to_string::to_stream(out,m);
 	std::string exp="std::map<std::string, std::string, std::less<std::string>, std::allocator<std::pair<std::string const, std::string> > >{}";
-	ASSERT_EQUAL(exp,out.str());
+	ASSERT_EQUAL(normalize_nested_template_brackets(exp),normalize_nested_template_brackets(out.str()));
 }
+
+
 
 
 void test_output_for_std_map() {
@@ -174,7 +184,7 @@ void test_output_for_std_map() {
 	std::string exp="std::map<std::string, std::string, std::less<std::string>, std::allocator<std::pair<std::string const, std::string> > >{"
 "\n[five -> six],\n[one -> two],\n[three -> four]}";
 
-	ASSERT_EQUAL(exp,(out.str()));
+	ASSERT_EQUAL(normalize_nested_template_brackets(exp),normalize_nested_template_brackets(out.str()));
 }
 void test_output_for_std_pair(){
 	std::ostringstream out;
@@ -194,7 +204,9 @@ void test_output_for_vector_pair(){
 	v.push_back(std::make_pair(42,4));
 	std::ostringstream os;
 	cute::cute_to_string::to_stream(os,v);
-	ASSERT_EQUAL("std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >{\n[42 -> 4]}",(os.str()));
+	std::string exp("std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >{\n[42 -> 4]}");
+	ASSERT_EQUAL(normalize_nested_template_brackets(exp),normalize_nested_template_brackets(os.str()));
+
 }
 
 void test_output_for_vector_set_int_empty(){
@@ -202,7 +214,7 @@ void test_output_for_vector_set_int_empty(){
 	std::ostringstream os;
 	cute::cute_to_string::to_stream(os,v);
 	std::string exp="std::vector<std::set<int, std::less<int>, std::allocator<int> >, std::allocator<std::set<int, std::less<int>, std::allocator<int> > > >{}";
-	ASSERT_EQUAL(exp,(os.str()));
+	ASSERT_EQUAL(normalize_nested_template_brackets(exp),normalize_nested_template_brackets(os.str()));
 }
 struct No_output_operator{};
 

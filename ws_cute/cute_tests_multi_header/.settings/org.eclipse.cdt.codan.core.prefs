@@ -1,0 +1,5 @@
+com.cevelop.elevator.problems.defaultctor=Warning
+com.cevelop.elevator.problems.nullMacro=Warning
+com.cevelop.elevator.problems.uninitialized=Warning
+eclipse.preferences.version=1
+useParentScope=false
