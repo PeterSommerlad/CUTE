@@ -13,10 +13,12 @@ Also available through Conan.io thanks to fmorgner:
  * https://www.conan.io/source/CUTE/2.2.0/fmorgner/stable
 
 
-=======
+<hr/>
 
 Update: reincarnated a single header CUTE version employing C++17
 
 * [cute_sh.h](cute_sh.h)
+
+* [single header main program starter](singleheadermain.cpp)
 
 added Cevelop workspace with tests for both versions
