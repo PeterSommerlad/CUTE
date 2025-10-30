@@ -1,0 +1,9 @@
+<testsuites>
+	<testsuite name="AllTests" tests="1">
+		<testcase classname="AllTests" name="thisIsATest">
+			<failure message="../main.cpp:3 thisIsATest: start writing tests">
+thisIsATest: start writing tests
+			</failure>
+		</testcase>
+	</testsuite>
+</testsuites>
