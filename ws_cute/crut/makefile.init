@@ -1,0 +1,2 @@
+gcm.cache/std.gcm std.c++-module : /opt/homebrew//Cellar/gcc/16.1.0/include/c++/16/bits/std.cc
+	g++-16 -std=c++26 -c -O0 -g -fmodules -freflection -fmodule-only -fsearch-include-path bits/std.cc
