@@ -54,26 +54,69 @@ namespace cute {
 			Listener::start(t);
 		}
 		void success(test const &t, char const *msg){
-			out << "\n#success " <<  maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
+#ifdef _MSC_VER
+			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+			if (hStdOut != NULL && hStdOut != INVALID_HANDLE_VALUE) {
+				CONSOLE_SCREEN_BUFFER_INFO csbi;
+				if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+					WORD consoleAttributes = csbi.wAttributes & ~(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+					SetConsoleTextAttribute(hStdOut, consoleAttributes | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+					out << "\n#success " << maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
+					SetConsoleTextAttribute(hStdOut, csbi.wAttributes);
+				} else {
+					out << "\n#success " << maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
+				}
+			}
+#else
+			out << "\n#success " << maskBlanks(t.name()) << " " << msg << '\n' << std::flush;
+#endif
 			Listener::success(t,msg);
 		}
 		void failure(test const &t,test_failure const &e){
-			out << std::dec <<  "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
-			Listener::failure(t,e);
 #ifdef _MSC_VER
+			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+			if (hStdOut != NULL && hStdOut != INVALID_HANDLE_VALUE) {
+				CONSOLE_SCREEN_BUFFER_INFO csbi;
+				if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+					WORD consoleAttributes = csbi.wAttributes & ~(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+					SetConsoleTextAttribute(hStdOut, consoleAttributes | FOREGROUND_RED | FOREGROUND_INTENSITY);
+					out << std::dec << "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
+					SetConsoleTextAttribute(hStdOut, csbi.wAttributes);
+				} else {
+					out << std::dec << "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
+				}
+			}
+
 			std::ostringstream os;
-			os << std::dec << e.filename << "(" << e.lineno << ") : failure: " <<e.reason << " in " << t.name() << '\n' << std::flush;
+			os << std::dec << e.filename << "(" << e.lineno << ") : failure: " << e.reason << " in " << t.name() << '\n' << std::flush;
 			OutputDebugString(os.str().c_str());
+#else
+			out << std::dec << "\n#failure " << maskBlanks(t.name()) << " " << e.filename << ":" << e.lineno << " " << (e.reason) << '\n' << std::flush;
 #endif
+			Listener::failure(t,e);
 		}
 		void error(test const &t, char const *what){
-			out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
-			Listener::error(t,what);
 #ifdef _MSC_VER
+			HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+			if (hStdOut != NULL && hStdOut != INVALID_HANDLE_VALUE) {
+				CONSOLE_SCREEN_BUFFER_INFO csbi;
+				if (GetConsoleScreenBufferInfo(hStdOut, &csbi)) {
+					WORD consoleAttributes = csbi.wAttributes & ~(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+					SetConsoleTextAttribute(hStdOut, consoleAttributes | FOREGROUND_RED | FOREGROUND_INTENSITY);
+					out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
+					SetConsoleTextAttribute(hStdOut, csbi.wAttributes);
+				} else {
+					out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
+				}
+			}
+
 			std::ostringstream os;
 			os << what << " error in " << t.name() << '\n' << std::flush;
 			OutputDebugString(os.str().c_str());
+#else
+			out << "\n#error " << maskBlanks(t.name()) << " " << what << '\n' << std::flush;
 #endif
+			Listener::error(t, what);
 		}
 		static std::string maskBlanks(std::string in) {
 			std::transform(in.begin(),in.end(),in.begin(),blankToUnderscore());
